@@ -1,0 +1,36 @@
+html {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 32px;
+    width: 100%;
+    max-width: 512px;
+    height: 100%;
+    margin: auto;
+    background-color: #f8f9fa;
+    padding: 32px;
+}
+
+body > * {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#commands-tab-pane__content {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 32px;
+}
+
+#commands-tab-pane__content,
+#status-tab-pane__content {
+    text-align: center;
+}
+
+#status-tab-pane__content__update-status-button {
+    margin-bottom: 16px;
+}

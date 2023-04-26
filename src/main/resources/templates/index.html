@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>Терминал Брокера [BestHack'23]</title>
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
+          integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" rel="stylesheet">
+    <script crossorigin="anonymous"
+            integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" th:href="@{css/styles.css}"/>
+    <link rel="icon" th:href="@{images/favicon.ico}" type="image/x-icon">
+</head>
+<body>
+<h1>Терминал Брокера</h1>
+<button class="btn btn-primary" id="connect-to-tcp-button" type="button">Подключиться к TCP-серверу</button>
+<!-- Выбор сервиса БИ -->
+<select aria-label="" class="form-select" id="service-select">
+    <option selected>Сервисы БИ</option>
+</select>
+<!-- Вкладки с командами и статусами -->
+<ul class="nav nav-tabs" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button aria-controls="commands-tab-pane" aria-selected="true" class="nav-link active"
+                data-bs-target="#commands-tab-pane"
+                data-bs-toggle="tab" id="commands-tab" role="tab" type="button">Команды
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button aria-controls="status-tab-pane" aria-selected="false" class="nav-link" data-bs-target="#status-tab-pane"
+                data-bs-toggle="tab"
+                id="status-tab" role="tab" type="button">Статусы
+        </button>
+    </li>
+</ul>
+<div class="tab-content">
+    <!--  Панель с командами  -->
+    <div aria-labelledby="commands-tab" class="tab-pane fade show active" id="commands-tab-pane" role="tabpanel"
+         tabindex="0">
+        <div id="commands-tab-pane__content">
+            <select aria-label="" class="form-select" id="commands-tab-pane__content__select">
+                <option selected>Поддерживаемые команды</option>
+            </select>
+            <p id="commands-tab-pane__content__description">Описание команды</p>
+            <div class="container text-center" id="commands-tab-pane__content__parameters">
+                <div class="row">
+                    <div class="col">
+                        Параметр 1
+                    </div>
+                    <div class="col">
+                        <input size="10" type="text"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        Параметр 2
+                    </div>
+                    <div class="col">
+                        <input size="10" type="text"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        Параметр 3
+                    </div>
+                    <div class="col">
+                        <input size="10" type="text"/>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-primary" id="commands-tab-pane__content__send-button" type="button">Отправить
+            </button>
+        </div>
+    </div>
+    <!-- Панель с статусами -->
+    <div aria-labelledby="status-tab" class="tab-pane fade" id="status-tab-pane" role="tabpanel" tabindex="0">
+        <div id="status-tab-pane__content">
+            <p id="status-latency">Задержка: 300мс</p>
+            <button class="btn btn-primary" id="status-tab-pane__content__update-status-button" type="button">Запросить
+                статус
+            </button>
+            <table class="table table-info table-striped table-bordered">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">First</th>
+                    <th scope="col">Last</th>
+                    <th scope="col">Handle</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th scope="row">1</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                </tr>
+                <tr>
+                    <th scope="row">2</th>
+                    <td>Jacob</td>
+                    <td>Thornton</td>
+                    <td>@fat</td>
+                </tr>
+                <tr>
+                    <th scope="row">3</th>
+                    <td colspan="2">Larry the Bird</td>
+                    <td>@twitter</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+<script th:src="@{js/websocket.js}"></script>
+</html>
