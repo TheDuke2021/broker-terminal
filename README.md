@@ -13,7 +13,7 @@
   * TCP-сервер - Netty, Google Protocol Buffers;
   * HTTP-сервер - Spring MVC, Spring WebSockets;
   * Фронт-энд - HTML/CSS/JS + Bootstrap;
-  * Прочие библиотеки: Jackson.
+  * Прочие библиотеки - Jackson.
 
 Для TCP-сервера был выбран фреймворк Netty, т.к. в нём есть встроенная поддержка протокола Google Protocol Buffers. WebSocket'ы используются для дуплексного общения HTTP-сервера с WEB GUI-клиентами. Т.к. в нашей команде никто не знал фронт-энд фреймворков (React, Vue, Angular), клиентская часть была написана на голом HTML/CSS/JS. Библиотека Jackson используется для кодирования и декодирования классов в JSON-формат.
 
