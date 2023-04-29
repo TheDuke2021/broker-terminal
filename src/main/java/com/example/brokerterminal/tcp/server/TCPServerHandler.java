@@ -256,23 +256,23 @@ public class TCPServerHandler extends SimpleChannelInboundHandler<ExchangeInfoMe
 //        if (message.getRequest().getCommand() != ctStatus)
         requests.add(message);
         ExchangeInfoMessage finalMessage = message;
-        new Thread(() -> {
-            //Через время, равное REQUEST_TIMEOUT, выполняем проверку - был ли получен ответ на Request
-            try {
-                Thread.sleep(REQUEST_TIMEOUT);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            if (requests.contains(finalMessage)) {
-                RequestTimedOutException e = new RequestTimedOutException(
-                        String.format("Request to the exchange service has been timed out. Remote address: %s, Receiver: %s, Request: %s",
-                                entry.getKey().remoteAddress(),
-                                finalMessage.getHeader().getReceiver(),
-                                finalMessage));
-                entry.getKey().close();
-                throw e;
-            }
-        }).start();
+//        new Thread(() -> {
+//            //Через время, равное REQUEST_TIMEOUT, выполняем проверку - был ли получен ответ на Request
+//            try {
+//                Thread.sleep(REQUEST_TIMEOUT);
+//            } catch (InterruptedException e) {
+//                throw new RuntimeException(e);
+//            }
+//            if (requests.contains(finalMessage)) {
+//                RequestTimedOutException e = new RequestTimedOutException(
+//                        String.format("Request to the exchange service has been timed out. Remote address: %s, Receiver: %s, Request: %s",
+//                                entry.getKey().remoteAddress(),
+//                                finalMessage.getHeader().getReceiver(),
+//                                finalMessage));
+//                entry.getKey().close();
+//                throw e;
+//            }
+//        }).start();
     }
 
 

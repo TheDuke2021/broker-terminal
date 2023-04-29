@@ -77,6 +77,7 @@ public class ExchangeServiceHandler extends SimpleChannelInboundHandler<Exchange
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ExchangeInfoMessage message) throws Exception {
+        System.out.println(identifier);
         System.out.println(message);
     }
 
