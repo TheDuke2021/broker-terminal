@@ -4,7 +4,7 @@
 const URL = window.location.host;
 
 //Перемнная, в которой в JSON-формате хранится информация о подключенных сервисах биржевой информации,
-//их поддерживаемых командах и последнем присланном Status-объекте
+//их поддерживаемых командах и данных
 let services = [];
 
 //DOM-элементы
@@ -17,18 +17,19 @@ let messagesSocket;
 let notificationsSocket;
 
 
+//Подключение сокетов
 function connectToWebSockets() {
     messagesSocket = new WebSocket("ws://" + URL + "/messages");
 
     messagesSocket.onmessage = function (messageEvent) {
         const message = JSON.parse(messageEvent.data);
-        const serviceIdentifier = message.header.sender;
+        console.log(message);
+        const serviceIdentifier = message.identifier;
         for (let i = 0; i < services.length; i++) {
             if (services[i].identifier === serviceIdentifier) {
-                const messageBody = message.event === undefined ? message.response : message.event;
-                services[i].lastStatus = messageBody.status;
+                services[i].data = message.data;
                 const receivedTimestamp = Date.now();
-                services[i].latency = receivedTimestamp - message.header.timestamp;
+                services[i].latency = receivedTimestamp - message.timestamp;
 
                 break;
             }
@@ -41,11 +42,6 @@ function connectToWebSockets() {
 
     notificationsSocket = new WebSocket("ws://" + URL + "/notifications");
 
-    notificationsSocket.onopen = function () {
-        //TODO toast message "Успешно подключились к TCP-серверу"
-        //Пока что просто вывод в консоль (для отладки)
-        console.log("Connected to TCP-server");
-    }
 
     notificationsSocket.onmessage = function (messageEvent) {
         const message = JSON.parse(messageEvent.data);
@@ -87,7 +83,7 @@ function loadServicesOnPage(services) {
         serviceSelect.add(option);
     }
 
-    if(serviceSelect.options.length < 1) {
+    if (serviceSelect.options.length < 1) {
         let option = document.createElement("option");
         option.value = "none";
         option.innerHTML = "Нет доступных серверов БИ";
@@ -105,16 +101,13 @@ function updateStatusTab() {
     const table = document.querySelector("table");
     table.innerHTML = "";
 
-    if (!service)
+    if (!service || Object.keys(service.data).length === 0)
         return;
 
-    const lastStatus = service.lastStatus;
-    if (!lastStatus || !lastStatus.advStatus)
-        return;
 
     latency.innerHTML = "Задержка: " + service.latency + "мс";
 
-    const headFields = lastStatus.advStatus.fields;
+    const headFields = service.data.fields;
 
     let head = document.createElement("thead");
     let headRow = document.createElement("tr");
@@ -131,12 +124,11 @@ function updateStatusTab() {
 
     let body = document.createElement("tbody");
     //Заполнение данных
-    const data = lastStatus.advStatus.data;
-    for (let dataRow of data.rows) {
+    for (let dataRow of service.data.data.rows) {
         let tr = document.createElement("tr");
         for (let valueRef of dataRow.values) {
             let td = document.createElement("td");
-            td.innerHTML = valueRef.value;
+            td.innerHTML = valueRef.value.value;
             tr.appendChild(td);
         }
         body.appendChild(tr);
@@ -155,7 +147,7 @@ function updateCommandsTab() {
     let commandParameters = document.querySelector("#commands-tab-pane__content__parameters");
     commandParameters.innerHTML = "";
 
-    if (!service)
+    if (!service || service.data == null)
         return;
 
     const supportedCommands = service.supportedCommands;
@@ -215,11 +207,14 @@ function updateServiceSelect(serviceToCheck, type) {
                     if (previousId === serviceToCheck.identifier)
                         serviceSelect.dispatchEvent(new Event("change"));
 
-                    if(serviceSelect.options.length < 1) {
+                    if (serviceSelect.options.length < 1) {
                         let option = document.createElement("option");
                         option.value = "none";
-                        option.innerHTML = "Нет доступных сервисов БИ";
+                        option.innerHTML = "Нет доступных серверов БИ";
                         serviceSelect.appendChild(option);
+
+                        document.querySelector("#status-tab-pane__content__update-status-button").disabled = true;
+                        document.querySelector("#commands-tab-pane__content__send-button").disabled = true;
                     }
 
                     break;
@@ -227,8 +222,8 @@ function updateServiceSelect(serviceToCheck, type) {
             }
             break;
         case "CONNECTED":
-            if(serviceSelect.option.length == 1) {
-                if(serviceSelect.value === "none")
+            if (serviceSelect.options.length == 1) {
+                if (serviceSelect.value === "none")
                     serviceSelect.innerHTML = "";
             }
             let option = document.createElement("option");
@@ -237,6 +232,9 @@ function updateServiceSelect(serviceToCheck, type) {
             serviceSelect.appendChild(option);
             if (serviceSelect.options.length < 2)
                 serviceSelect.dispatchEvent(new Event("change"));
+
+            document.querySelector("#status-tab-pane__content__update-status-button").disabled = false;
+            document.querySelector("#commands-tab-pane__content__send-button").disabled = false;
 
             break;
     }
@@ -305,5 +303,6 @@ window.onload = () => {
     document.querySelector("#status-tab-pane__content__update-status-button").addEventListener("click", sendStatusRequest);
 
     connectToWebSockets();
+
 
 }

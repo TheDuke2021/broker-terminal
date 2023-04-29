@@ -1,18 +1,18 @@
 package com.example.brokerterminal.events;
 
-import com.example.brokerterminal.proto.ExchangeInfoMessage;
+import com.example.brokerterminal.tcp.server.ExchangeServiceConnection;
 import org.springframework.context.ApplicationEvent;
 
 public class ExchangeServiceMessageReceivedEvent extends ApplicationEvent {
 
-    private ExchangeInfoMessage message;
+    private ExchangeServiceConnection connection;
 
-    public ExchangeServiceMessageReceivedEvent(Object source, ExchangeInfoMessage message) {
+    public ExchangeServiceMessageReceivedEvent(Object source, ExchangeServiceConnection connection) {
         super(source);
-        this.message = message;
+        this.connection = connection;
     }
 
-    public ExchangeInfoMessage getMessage() {
-        return message;
+    public ExchangeServiceConnection getConnection() {
+        return connection;
     }
 }

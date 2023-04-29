@@ -124,7 +124,8 @@ public class TCPServerHandler extends SimpleChannelInboundHandler<ExchangeInfoMe
             if (!serverIdentifier.equals(message.getHeader().getReceiver()))
                 return;
             connection.setData(processData(connection.getData(), message.getEvent().getStatus().getAdvStatus()));
-            applicationEventPublisher.publishEvent(new ExchangeServiceMessageReceivedEvent(this, message));
+            connection.setTimestamp(message.getHeader().getTimestamp());
+            applicationEventPublisher.publishEvent(new ExchangeServiceMessageReceivedEvent(this, connection));
         }
 
         //Обработка Response
@@ -158,10 +159,11 @@ public class TCPServerHandler extends SimpleChannelInboundHandler<ExchangeInfoMe
             if (message.getResponse().getAnswerType() != MessageEnumsProto.AnswerType.atAnswerOK)
                 return;
 
-            applicationEventPublisher.publishEvent(new ExchangeServiceMessageReceivedEvent(this, message));
+            connection.setTimestamp(message.getHeader().getTimestamp());
+            applicationEventPublisher.publishEvent(new ExchangeServiceMessageReceivedEvent(this, connection));
         }
 
-        System.out.println(message);
+//        System.out.println(message);
     }
 
     //Обработка разъединённого соединенеия

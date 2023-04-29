@@ -28,10 +28,9 @@ public class ExchangeServiceConnectionSerializer extends StdSerializer<ExchangeS
             jsonGenerator.writeRawValue(JsonFormat.printer().print(command));
         }
         jsonGenerator.writeEndArray();
-        if (connection.getData() != null) {
-            jsonGenerator.writeFieldName("lastStatus");
-            jsonGenerator.writeRawValue(JsonFormat.printer().print(connection.getData()));
-        }
+        jsonGenerator.writeFieldName("data");
+        jsonGenerator.writeRawValue(JsonFormat.printer().print(connection.getData()));
+        jsonGenerator.writeStringField("timestamp", String.valueOf(connection.getTimestamp()));
         jsonGenerator.writeEndObject();
     }
 }

@@ -10,15 +10,16 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class NotificationsWebSocket extends TextWebSocketHandler {
 
     private final TCPServer tcpServer;
-    private List<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
+    private final List<WebSocketSession> sessions = Collections.synchronizedList(new ArrayList<>());
     //Jackson JSON-конвертер
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public NotificationsWebSocket(TCPServer tcpServer) {
         this.tcpServer = tcpServer;
@@ -40,7 +41,7 @@ public class NotificationsWebSocket extends TextWebSocketHandler {
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-
+        //Ignore
     }
 
     @EventListener
@@ -48,9 +49,11 @@ public class NotificationsWebSocket extends TextWebSocketHandler {
         sendToAll(objectMapper.writeValueAsString(event));
     }
 
-    private synchronized void sendToAll(String message) throws IOException {
+    private void sendToAll(String message) throws IOException {
         for (WebSocketSession session : sessions) {
-            session.sendMessage(new TextMessage(message));
+            synchronized (session) {
+                session.sendMessage(new TextMessage(message));
+            }
         }
     }
 }

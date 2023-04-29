@@ -12,18 +12,16 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.io.IOException;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class MessagesWebSocket extends TextWebSocketHandler {
 
     private final TCPServer tcpServer;
-    private List<WebSocketSession> sessions = Collections.synchronizedList(new ArrayList<>());
+    private final List<WebSocketSession> sessions = Collections.synchronizedList(new ArrayList<>());
     //Jackson JSON-конвертер
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public MessagesWebSocket(TCPServer tcpServer) {
         this.tcpServer = tcpServer;
@@ -42,14 +40,14 @@ public class MessagesWebSocket extends TextWebSocketHandler {
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        ExchangeInfoMessage.Builder eim = ExchangeInfoMessage.newBuilder();
-        JsonFormat.parser().ignoringUnknownFields().merge(message.getPayload(), eim);
-        tcpServer.sendMessage(eim.build());
+        ExchangeInfoMessage.Builder exchangeInfoMessage = ExchangeInfoMessage.newBuilder();
+        JsonFormat.parser().ignoringUnknownFields().merge(message.getPayload(), exchangeInfoMessage);
+        tcpServer.sendMessage(exchangeInfoMessage.build());
     }
 
     @EventListener
     public void handleMessageFromExchangeService(ExchangeServiceMessageReceivedEvent event) throws IOException {
-        sendToAll(JsonFormat.printer().print(event.getMessage()));
+        sendToAll(objectMapper.writeValueAsString(event.getConnection()));
     }
 
     private void sendToAll(String message) throws IOException {

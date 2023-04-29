@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 //Данный класс представляет соединение между TCP-сервером и сервисом биржевой информации
 @JsonSerialize(using = ExchangeServiceConnectionSerializer.class)
@@ -19,9 +18,19 @@ public class ExchangeServiceConnection {
     private List<OwnCommand> supportedCommands = new ArrayList<>();
     //Переменная, хранящая данные, полученные от сервиса биржевой информации
     private AdvInfo data = AdvInfo.getDefaultInstance();
+    //Время формирования последнего сообщения от сервиса
+    private long timestamp;
 
     public ExchangeServiceConnection(String identifier) {
         this.identifier = identifier;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 
     public AdvInfo getData() {
