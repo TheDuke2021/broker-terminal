@@ -42,7 +42,6 @@ function connectToWebSockets() {
     notificationsSocket = new WebSocket("ws://" + URL + "/notifications");
 
     notificationsSocket.onopen = function () {
-        document.querySelector("#connect-to-tcp-button").disabled = true;
         //TODO toast message "Успешно подключились к TCP-серверу"
         //Пока что просто вывод в консоль (для отладки)
         console.log("Connected to TCP-server");
@@ -88,6 +87,13 @@ function loadServicesOnPage(services) {
         serviceSelect.add(option);
     }
 
+    if(serviceSelect.options.length < 1) {
+        let option = document.createElement("option");
+        option.value = "none";
+        option.innerHTML = "Нет доступных серверов БИ";
+        serviceSelect.appendChild(option);
+    }
+
     updateCommandsTab();
     updateStatusTab();
 }
@@ -126,7 +132,6 @@ function updateStatusTab() {
     let body = document.createElement("tbody");
     //Заполнение данных
     const data = lastStatus.advStatus.data;
-    //ИНКРЕМЕНТАЛЬНОЕ ОБНОВЛЕНИЕ ДАННЫХ НЕ ПОДДЕРЖИВАЕТСЯ
     for (let dataRow of data.rows) {
         let tr = document.createElement("tr");
         for (let valueRef of dataRow.values) {
@@ -210,17 +215,29 @@ function updateServiceSelect(serviceToCheck, type) {
                     if (previousId === serviceToCheck.identifier)
                         serviceSelect.dispatchEvent(new Event("change"));
 
+                    if(serviceSelect.options.length < 1) {
+                        let option = document.createElement("option");
+                        option.value = "none";
+                        option.innerHTML = "Нет доступных сервисов БИ";
+                        serviceSelect.appendChild(option);
+                    }
+
                     break;
                 }
             }
             break;
         case "CONNECTED":
+            if(serviceSelect.option.length == 1) {
+                if(serviceSelect.value === "none")
+                    serviceSelect.innerHTML = "";
+            }
             let option = document.createElement("option");
             option.value = serviceToCheck.identifier;
             option.innerHTML = serviceToCheck.identifier;
             serviceSelect.appendChild(option);
             if (serviceSelect.options.length < 2)
                 serviceSelect.dispatchEvent(new Event("change"));
+
             break;
     }
 }
@@ -286,7 +303,7 @@ window.onload = () => {
 
     document.querySelector("#commands-tab-pane__content__send-button").addEventListener("click", sendCommandRequest);
     document.querySelector("#status-tab-pane__content__update-status-button").addEventListener("click", sendStatusRequest);
-    document.querySelector("#connect-to-tcp-button").addEventListener("click", connectToWebSockets);
 
+    connectToWebSockets();
 
 }
