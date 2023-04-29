@@ -2,12 +2,10 @@ package com.example.brokerterminal.tcp.server;
 
 import com.example.brokerterminal.events.ExchangeServiceConnectionEvent;
 import com.example.brokerterminal.events.ExchangeServiceMessageReceivedEvent;
-import com.example.brokerterminal.proto.ExchangeInfoMessage;
-import com.example.brokerterminal.proto.Header;
-import com.example.brokerterminal.proto.MessageEnumsProto;
-import com.example.brokerterminal.proto.Response;
+import com.example.brokerterminal.proto.*;
 import com.example.brokerterminal.tcp.exceptions.CommandTypeMismatchException;
-import com.example.brokerterminal.tcp.exceptions.HandshakeTimeoutException;
+import com.example.brokerterminal.tcp.exceptions.HandshakeTimedOutException;
+import com.example.brokerterminal.tcp.exceptions.RequestTimedOutException;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
@@ -15,6 +13,8 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import static com.example.brokerterminal.proto.MessageEnumsProto.CommandType.ctHandshake;
 import static com.example.brokerterminal.proto.MessageEnumsProto.CommandType.ctStatus;
@@ -27,8 +27,11 @@ public class TCPServerHandler extends SimpleChannelInboundHandler<ExchangeInfoMe
 
     //Time-out приветствия. По условиям задачи равен 5 секундам
     private final long HANDSHAKE_TIMEOUT = 5000L;
+    //Time-out ответа на запрос к сервису БИ
+    private final long REQUEST_TIMEOUT = 5000L;
     //Хеш-таблица, содержащая все соединения с сервисами биржевой информации
-    private final Map<Channel, ExchangeServiceConnection> connections = Collections.synchronizedMap(new HashMap<>());
+//    private final Map<Channel, ExchangeServiceConnection> connections = Collections.synchronizedMap(new HashMap<>());
+    private final Map<Channel, ExchangeServiceConnection> connections = new ConcurrentHashMap<>();
     //Сет содержит реквесты, которые были отправлены сервисам биржевой информации и на которые ещё не был получен Response
     private final Set<ExchangeInfoMessage> requests = Collections.synchronizedSet(new HashSet<>());
     private final String serverIdentifier;
@@ -50,8 +53,8 @@ public class TCPServerHandler extends SimpleChannelInboundHandler<ExchangeInfoMe
                 //Через время, равное HANDSHAKE_TIMEOUT, выполняем проверку - был ли установлен handshake
                 Thread.sleep(HANDSHAKE_TIMEOUT);
                 if (!connections.containsKey(ctx.channel())) {
-                    HandshakeTimeoutException e = new HandshakeTimeoutException(
-                            String.format("Handshake time out exceeded. Remote address: %s",
+                    HandshakeTimedOutException e = new HandshakeTimedOutException(
+                            String.format("Handshake timed out. Remote address: %s",
                                     ctx.channel().remoteAddress()));
                     ctx.channel().close();
                     throw e;
@@ -71,7 +74,7 @@ public class TCPServerHandler extends SimpleChannelInboundHandler<ExchangeInfoMe
             return;
 
         //Если входящее сообщение - запрос на handshake, то обрабатываем его
-        if (message.hasRequest()) {
+        if (!connections.containsKey(ctx.channel()) && message.hasRequest()) {
             //Проверка типа комманды
             MessageEnumsProto.CommandType messageType = message.getRequest().getCommand();
             if (messageType != ctHandshake) {
@@ -120,7 +123,7 @@ public class TCPServerHandler extends SimpleChannelInboundHandler<ExchangeInfoMe
             //Проверка на соответствие идентификатора сервера и поля receiver сообщения
             if (!serverIdentifier.equals(message.getHeader().getReceiver()))
                 return;
-            connections.get(ctx.channel()).setLastStatus(message.getEvent().getStatus());
+            connection.setData(processData(connection.getData(), message.getEvent().getStatus().getAdvStatus()));
             applicationEventPublisher.publishEvent(new ExchangeServiceMessageReceivedEvent(this, message));
         }
 
@@ -157,8 +160,6 @@ public class TCPServerHandler extends SimpleChannelInboundHandler<ExchangeInfoMe
 
             applicationEventPublisher.publishEvent(new ExchangeServiceMessageReceivedEvent(this, message));
         }
-
-//        System.out.println(message);
     }
 
     //Обработка разъединённого соединенеия
@@ -173,6 +174,63 @@ public class TCPServerHandler extends SimpleChannelInboundHandler<ExchangeInfoMe
 
     public Map<Channel, ExchangeServiceConnection> getConnections() {
         return connections;
+    }
+
+
+    private AdvInfo processData(AdvInfo currentData, AdvInfo receivedData) {
+        //Перезаписываем заголовок и список полей значениями, пришедшими с receivedData
+        AdvInfo.Builder currentDataBuilder = currentData.toBuilder();
+        currentDataBuilder.setCaption(receivedData.getCaption());
+        currentDataBuilder.clearFields();
+        currentDataBuilder.addAllFields(receivedData.getFieldsList());
+
+        //Проверка на полное или инкрементальное обновление данных
+        //Инкрементальное
+        if (receivedData.getData().getFullOrIncrement()) {
+            AdvInfoData.Builder currentDataBuilderData = currentDataBuilder.getData().toBuilder();
+            //1. Если строки с данными из поля rows нет в GUI значит ее нужно добавить
+            //Находим все строки с идентификаторами rowIdent, которых нет в текущих данных currentDataBuilderData
+            List<DataRow> newRows = receivedData.getData().getRowsList().stream()
+                    .filter(newRow -> currentDataBuilderData.getRowsList().stream()
+                            .noneMatch(currentRow -> currentRow.getRowIdent().equals(newRow.getRowIdent())))
+                    .collect(Collectors.toList());
+            currentDataBuilderData.addAllRows(newRows);
+
+            //2. Если строка с данными из поля rows есть в GUI значит значения полей в GUI нужно заменить значениями полей из пришедшей строки
+            List<DataRow> rowsToChange = receivedData.getData().getRowsList().stream()
+                    .filter(rowToChange -> currentDataBuilderData.getRowsList().stream()
+                            .anyMatch(currentRow -> currentRow.getRowIdent().equals(rowToChange.getRowIdent())))
+                    .collect(Collectors.toList());
+            for (DataRow rowToChange : rowsToChange) {
+                int index = currentDataBuilderData.getRowsList().indexOf(currentDataBuilderData.getRowsList().stream()
+                        .filter(row -> row.getRowIdent().equals(rowToChange.getRowIdent()))
+                        .findFirst()
+                        .get());
+
+                currentDataBuilderData.setRows(index, rowToChange);
+            }
+
+            //3. Если строка с данными из поля rows помечена флагом incrementDelete = true значит эта строка должна быть удалена из GUI
+            List<DataRow> rowsToDelete = receivedData.getData().getRowsList().stream()
+                    .filter(DataRow::getIncrementDelete)
+                    .collect(Collectors.toList());
+            for (DataRow rowToDelete : rowsToDelete) {
+                int index = currentDataBuilderData.getRowsList().indexOf(currentDataBuilderData.getRowsList().stream()
+                        .filter(row -> row.getRowIdent().equals(rowToDelete.getRowIdent()))
+                        .findFirst()
+                        .get());
+
+                currentDataBuilderData.removeRows(index);
+            }
+
+            currentDataBuilder.setData(currentDataBuilderData.build());
+        }
+        //Полное
+        else {
+            currentDataBuilder.setData(receivedData.getData());
+        }
+
+        return currentDataBuilder.build();
     }
 
     //Отправка сообщений сервисам биржевой информации
@@ -195,8 +253,26 @@ public class TCPServerHandler extends SimpleChannelInboundHandler<ExchangeInfoMe
             return;
 
         entry.getKey().writeAndFlush(message);
-        if (message.getRequest().getCommand() != ctStatus)
-            requests.add(message);
+//        if (message.getRequest().getCommand() != ctStatus)
+        requests.add(message);
+        ExchangeInfoMessage finalMessage = message;
+        new Thread(() -> {
+            //Через время, равное REQUEST_TIMEOUT, выполняем проверку - был ли получен ответ на Request
+            try {
+                Thread.sleep(REQUEST_TIMEOUT);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            if (requests.contains(finalMessage)) {
+                RequestTimedOutException e = new RequestTimedOutException(
+                        String.format("Request to the exchange service has been timed out. Remote address: %s, Receiver: %s, Request: %s",
+                                entry.getKey().remoteAddress(),
+                                finalMessage.getHeader().getReceiver(),
+                                finalMessage));
+                entry.getKey().close();
+                throw e;
+            }
+        }).start();
     }
 
 

@@ -100,6 +100,8 @@ public class ExchangeServiceTest {
 
         ExchangeService.Action action = (channel, handler) -> {
             handler.sendHandshake().sync();
+            handler.sendEvent(status);
+            Thread.sleep(3000);
             while (true) {
                 Status status1 = status.toBuilder()
                         .setAdvStatus(AdvInfo.newBuilder()
@@ -117,7 +119,7 @@ public class ExchangeServiceTest {
                                         .setCaption("Доступно")
                                         .setDataType(MessageEnumsProto.DataType.dtFloat))
                                 .setData(AdvInfoData.newBuilder()
-                                        .setFullOrIncrement(false)
+                                        .setFullOrIncrement(true)
                                         .addRows(DataRow.newBuilder()
                                                 .setRowIdent("1")
                                                 .setIncrementDelete(false)
@@ -143,11 +145,23 @@ public class ExchangeServiceTest {
                                                         .setDataType(MessageEnumsProto.DataType.dtFloat)
                                                         .setValue("12")))
                                         .addRows(DataRow.newBuilder()
-                                                .setRowIdent("2")
-                                                .setIncrementDelete(false)
+                                                .setRowIdent("3")
+                                                .setIncrementDelete(true)
                                                 .addValues(ValueRef.newBuilder()
                                                         .setDataType(MessageEnumsProto.DataType.dtString)
                                                         .setValue("Ценные бумаги"))
+                                                .addValues(ValueRef.newBuilder()
+                                                        .setDataType(MessageEnumsProto.DataType.dtFloat)
+                                                        .setValue(String.format("%.2f", Math.random() * 1000)))
+                                                .addValues(ValueRef.newBuilder()
+                                                        .setDataType(MessageEnumsProto.DataType.dtFloat)
+                                                        .setValue(String.valueOf((int) (Math.random() * 100 + 15)))))
+                                        .addRows(DataRow.newBuilder()
+                                                .setRowIdent("4")
+                                                .setIncrementDelete(false)
+                                                .addValues(ValueRef.newBuilder()
+                                                        .setDataType(MessageEnumsProto.DataType.dtString)
+                                                        .setValue("Купоны"))
                                                 .addValues(ValueRef.newBuilder()
                                                         .setDataType(MessageEnumsProto.DataType.dtFloat)
                                                         .setValue(String.format("%.2f", Math.random() * 1000)))
@@ -160,8 +174,9 @@ public class ExchangeServiceTest {
             }
         };
 
+//        for(int i = 0; i < 30; i++) {
         ExchangeService service1 = new ExchangeService(
-                "service1",
+                "service",
                 "server",
                 "localhost",
                 10000,
@@ -170,6 +185,7 @@ public class ExchangeServiceTest {
                 action);
 
         service1.start();
+//        }
 
 
         supportedCommands = new ArrayList<>();
@@ -237,15 +253,15 @@ public class ExchangeServiceTest {
         };
 
 
-        new ExchangeService(
-                "Сервис номер 2",
-                "server",
-                "localhost",
-                10000,
-                supportedCommands,
-                status,
-                action1
-        ).start();
+//        new ExchangeService(
+//                "Сервис номер 2",
+//                "server",
+//                "localhost",
+//                10000,
+//                supportedCommands,
+//                status,
+//                action1
+//        ).start();
 
 
     }

@@ -12,13 +12,16 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.io.IOException;
+import java.sql.Array;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class MessagesWebSocket extends TextWebSocketHandler {
 
     private final TCPServer tcpServer;
-    private List<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
+    private List<WebSocketSession> sessions = Collections.synchronizedList(new ArrayList<>());
     //Jackson JSON-конвертер
     private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -27,7 +30,7 @@ public class MessagesWebSocket extends TextWebSocketHandler {
     }
 
     @Override
-    public void afterConnectionEstablished(WebSocketSession session) throws IOException {
+    public void afterConnectionEstablished(WebSocketSession session) throws IOException, InterruptedException {
         sessions.add(session);
     }
 
@@ -49,9 +52,11 @@ public class MessagesWebSocket extends TextWebSocketHandler {
         sendToAll(JsonFormat.printer().print(event.getMessage()));
     }
 
-    private synchronized void sendToAll(String message) throws IOException {
+    private void sendToAll(String message) throws IOException {
         for (WebSocketSession session : sessions) {
-            session.sendMessage(new TextMessage(message));
+            synchronized (session) {
+                session.sendMessage(new TextMessage(message));
+            }
         }
     }
 }

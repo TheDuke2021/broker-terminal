@@ -186,6 +186,7 @@ function updateCommandsTab() {
             paramValueInput.size = 10;
             paramValueInput.id = param.alias;
             paramValueInput.value = param.value.value;
+            paramValueInput.classList.add("form-control");
             paramValue.appendChild(paramValueInput);
 
             row.appendChild(paramKey);
