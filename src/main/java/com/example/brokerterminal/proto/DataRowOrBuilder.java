@@ -39,45 +39,45 @@ public interface DataRowOrBuilder extends
 
   /**
    * <pre>
-   * Описание значения поля
+   * Описание поля с установкой значения поля
    * </pre>
    *
-   * <code>repeated .com.example.brokerterminal.proto.ValueRef values = 3;</code>
+   * <code>repeated .com.example.brokerterminal.proto.DataFieldValue values = 3;</code>
    */
-  java.util.List<com.example.brokerterminal.proto.ValueRef> 
+  java.util.List<com.example.brokerterminal.proto.DataFieldValue> 
       getValuesList();
   /**
    * <pre>
-   * Описание значения поля
+   * Описание поля с установкой значения поля
    * </pre>
    *
-   * <code>repeated .com.example.brokerterminal.proto.ValueRef values = 3;</code>
+   * <code>repeated .com.example.brokerterminal.proto.DataFieldValue values = 3;</code>
    */
-  com.example.brokerterminal.proto.ValueRef getValues(int index);
+  com.example.brokerterminal.proto.DataFieldValue getValues(int index);
   /**
    * <pre>
-   * Описание значения поля
+   * Описание поля с установкой значения поля
    * </pre>
    *
-   * <code>repeated .com.example.brokerterminal.proto.ValueRef values = 3;</code>
+   * <code>repeated .com.example.brokerterminal.proto.DataFieldValue values = 3;</code>
    */
   int getValuesCount();
   /**
    * <pre>
-   * Описание значения поля
+   * Описание поля с установкой значения поля
    * </pre>
    *
-   * <code>repeated .com.example.brokerterminal.proto.ValueRef values = 3;</code>
+   * <code>repeated .com.example.brokerterminal.proto.DataFieldValue values = 3;</code>
    */
-  java.util.List<? extends com.example.brokerterminal.proto.ValueRefOrBuilder> 
+  java.util.List<? extends com.example.brokerterminal.proto.DataFieldValueOrBuilder> 
       getValuesOrBuilderList();
   /**
    * <pre>
-   * Описание значения поля
+   * Описание поля с установкой значения поля
    * </pre>
    *
-   * <code>repeated .com.example.brokerterminal.proto.ValueRef values = 3;</code>
+   * <code>repeated .com.example.brokerterminal.proto.DataFieldValue values = 3;</code>
    */
-  com.example.brokerterminal.proto.ValueRefOrBuilder getValuesOrBuilder(
+  com.example.brokerterminal.proto.DataFieldValueOrBuilder getValuesOrBuilder(
       int index);
 }

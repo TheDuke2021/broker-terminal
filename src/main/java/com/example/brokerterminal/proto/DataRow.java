@@ -104,36 +104,36 @@ private static final long serialVersionUID = 0L;
 
   public static final int VALUES_FIELD_NUMBER = 3;
   @SuppressWarnings("serial")
-  private java.util.List<com.example.brokerterminal.proto.ValueRef> values_;
+  private java.util.List<com.example.brokerterminal.proto.DataFieldValue> values_;
   /**
    * <pre>
-   * Описание значения поля
+   * Описание поля с установкой значения поля
    * </pre>
    *
-   * <code>repeated .com.example.brokerterminal.proto.ValueRef values = 3;</code>
+   * <code>repeated .com.example.brokerterminal.proto.DataFieldValue values = 3;</code>
    */
   @java.lang.Override
-  public java.util.List<com.example.brokerterminal.proto.ValueRef> getValuesList() {
+  public java.util.List<com.example.brokerterminal.proto.DataFieldValue> getValuesList() {
     return values_;
   }
   /**
    * <pre>
-   * Описание значения поля
+   * Описание поля с установкой значения поля
    * </pre>
    *
-   * <code>repeated .com.example.brokerterminal.proto.ValueRef values = 3;</code>
+   * <code>repeated .com.example.brokerterminal.proto.DataFieldValue values = 3;</code>
    */
   @java.lang.Override
-  public java.util.List<? extends com.example.brokerterminal.proto.ValueRefOrBuilder> 
+  public java.util.List<? extends com.example.brokerterminal.proto.DataFieldValueOrBuilder> 
       getValuesOrBuilderList() {
     return values_;
   }
   /**
    * <pre>
-   * Описание значения поля
+   * Описание поля с установкой значения поля
    * </pre>
    *
-   * <code>repeated .com.example.brokerterminal.proto.ValueRef values = 3;</code>
+   * <code>repeated .com.example.brokerterminal.proto.DataFieldValue values = 3;</code>
    */
   @java.lang.Override
   public int getValuesCount() {
@@ -141,24 +141,24 @@ private static final long serialVersionUID = 0L;
   }
   /**
    * <pre>
-   * Описание значения поля
+   * Описание поля с установкой значения поля
    * </pre>
    *
-   * <code>repeated .com.example.brokerterminal.proto.ValueRef values = 3;</code>
+   * <code>repeated .com.example.brokerterminal.proto.DataFieldValue values = 3;</code>
    */
   @java.lang.Override
-  public com.example.brokerterminal.proto.ValueRef getValues(int index) {
+  public com.example.brokerterminal.proto.DataFieldValue getValues(int index) {
     return values_.get(index);
   }
   /**
    * <pre>
-   * Описание значения поля
+   * Описание поля с установкой значения поля
    * </pre>
    *
-   * <code>repeated .com.example.brokerterminal.proto.ValueRef values = 3;</code>
+   * <code>repeated .com.example.brokerterminal.proto.DataFieldValue values = 3;</code>
    */
   @java.lang.Override
-  public com.example.brokerterminal.proto.ValueRefOrBuilder getValuesOrBuilder(
+  public com.example.brokerterminal.proto.DataFieldValueOrBuilder getValuesOrBuilder(
       int index) {
     return values_.get(index);
   }
@@ -522,9 +522,9 @@ private static final long serialVersionUID = 0L;
               break;
             } // case 16
             case 26: {
-              com.example.brokerterminal.proto.ValueRef m =
+              com.example.brokerterminal.proto.DataFieldValue m =
                   input.readMessage(
-                      com.example.brokerterminal.proto.ValueRef.parser(),
+                      com.example.brokerterminal.proto.DataFieldValue.parser(),
                       extensionRegistry);
               if (valuesBuilder_ == null) {
                 ensureValuesIsMutable();
@@ -687,26 +687,26 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private java.util.List<com.example.brokerterminal.proto.ValueRef> values_ =
+    private java.util.List<com.example.brokerterminal.proto.DataFieldValue> values_ =
       java.util.Collections.emptyList();
     private void ensureValuesIsMutable() {
       if (!((bitField0_ & 0x00000004) != 0)) {
-        values_ = new java.util.ArrayList<com.example.brokerterminal.proto.ValueRef>(values_);
+        values_ = new java.util.ArrayList<com.example.brokerterminal.proto.DataFieldValue>(values_);
         bitField0_ |= 0x00000004;
        }
     }
 
     private com.google.protobuf.RepeatedFieldBuilderV3<
-        com.example.brokerterminal.proto.ValueRef, com.example.brokerterminal.proto.ValueRef.Builder, com.example.brokerterminal.proto.ValueRefOrBuilder> valuesBuilder_;
+        com.example.brokerterminal.proto.DataFieldValue, com.example.brokerterminal.proto.DataFieldValue.Builder, com.example.brokerterminal.proto.DataFieldValueOrBuilder> valuesBuilder_;
 
     /**
      * <pre>
-     * Описание значения поля
+     * Описание поля с установкой значения поля
      * </pre>
      *
-     * <code>repeated .com.example.brokerterminal.proto.ValueRef values = 3;</code>
+     * <code>repeated .com.example.brokerterminal.proto.DataFieldValue values = 3;</code>
      */
-    public java.util.List<com.example.brokerterminal.proto.ValueRef> getValuesList() {
+    public java.util.List<com.example.brokerterminal.proto.DataFieldValue> getValuesList() {
       if (valuesBuilder_ == null) {
         return java.util.Collections.unmodifiableList(values_);
       } else {
@@ -715,10 +715,10 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
-     * Описание значения поля
+     * Описание поля с установкой значения поля
      * </pre>
      *
-     * <code>repeated .com.example.brokerterminal.proto.ValueRef values = 3;</code>
+     * <code>repeated .com.example.brokerterminal.proto.DataFieldValue values = 3;</code>
      */
     public int getValuesCount() {
       if (valuesBuilder_ == null) {
@@ -729,12 +729,12 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
-     * Описание значения поля
+     * Описание поля с установкой значения поля
      * </pre>
      *
-     * <code>repeated .com.example.brokerterminal.proto.ValueRef values = 3;</code>
+     * <code>repeated .com.example.brokerterminal.proto.DataFieldValue values = 3;</code>
      */
-    public com.example.brokerterminal.proto.ValueRef getValues(int index) {
+    public com.example.brokerterminal.proto.DataFieldValue getValues(int index) {
       if (valuesBuilder_ == null) {
         return values_.get(index);
       } else {
@@ -743,13 +743,13 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
-     * Описание значения поля
+     * Описание поля с установкой значения поля
      * </pre>
      *
-     * <code>repeated .com.example.brokerterminal.proto.ValueRef values = 3;</code>
+     * <code>repeated .com.example.brokerterminal.proto.DataFieldValue values = 3;</code>
      */
     public Builder setValues(
-        int index, com.example.brokerterminal.proto.ValueRef value) {
+        int index, com.example.brokerterminal.proto.DataFieldValue value) {
       if (valuesBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
@@ -764,13 +764,13 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
-     * Описание значения поля
+     * Описание поля с установкой значения поля
      * </pre>
      *
-     * <code>repeated .com.example.brokerterminal.proto.ValueRef values = 3;</code>
+     * <code>repeated .com.example.brokerterminal.proto.DataFieldValue values = 3;</code>
      */
     public Builder setValues(
-        int index, com.example.brokerterminal.proto.ValueRef.Builder builderForValue) {
+        int index, com.example.brokerterminal.proto.DataFieldValue.Builder builderForValue) {
       if (valuesBuilder_ == null) {
         ensureValuesIsMutable();
         values_.set(index, builderForValue.build());
@@ -782,12 +782,12 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
-     * Описание значения поля
+     * Описание поля с установкой значения поля
      * </pre>
      *
-     * <code>repeated .com.example.brokerterminal.proto.ValueRef values = 3;</code>
+     * <code>repeated .com.example.brokerterminal.proto.DataFieldValue values = 3;</code>
      */
-    public Builder addValues(com.example.brokerterminal.proto.ValueRef value) {
+    public Builder addValues(com.example.brokerterminal.proto.DataFieldValue value) {
       if (valuesBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
@@ -802,13 +802,13 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
-     * Описание значения поля
+     * Описание поля с установкой значения поля
      * </pre>
      *
-     * <code>repeated .com.example.brokerterminal.proto.ValueRef values = 3;</code>
+     * <code>repeated .com.example.brokerterminal.proto.DataFieldValue values = 3;</code>
      */
     public Builder addValues(
-        int index, com.example.brokerterminal.proto.ValueRef value) {
+        int index, com.example.brokerterminal.proto.DataFieldValue value) {
       if (valuesBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
@@ -823,13 +823,13 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
-     * Описание значения поля
+     * Описание поля с установкой значения поля
      * </pre>
      *
-     * <code>repeated .com.example.brokerterminal.proto.ValueRef values = 3;</code>
+     * <code>repeated .com.example.brokerterminal.proto.DataFieldValue values = 3;</code>
      */
     public Builder addValues(
-        com.example.brokerterminal.proto.ValueRef.Builder builderForValue) {
+        com.example.brokerterminal.proto.DataFieldValue.Builder builderForValue) {
       if (valuesBuilder_ == null) {
         ensureValuesIsMutable();
         values_.add(builderForValue.build());
@@ -841,13 +841,13 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
-     * Описание значения поля
+     * Описание поля с установкой значения поля
      * </pre>
      *
-     * <code>repeated .com.example.brokerterminal.proto.ValueRef values = 3;</code>
+     * <code>repeated .com.example.brokerterminal.proto.DataFieldValue values = 3;</code>
      */
     public Builder addValues(
-        int index, com.example.brokerterminal.proto.ValueRef.Builder builderForValue) {
+        int index, com.example.brokerterminal.proto.DataFieldValue.Builder builderForValue) {
       if (valuesBuilder_ == null) {
         ensureValuesIsMutable();
         values_.add(index, builderForValue.build());
@@ -859,13 +859,13 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
-     * Описание значения поля
+     * Описание поля с установкой значения поля
      * </pre>
      *
-     * <code>repeated .com.example.brokerterminal.proto.ValueRef values = 3;</code>
+     * <code>repeated .com.example.brokerterminal.proto.DataFieldValue values = 3;</code>
      */
     public Builder addAllValues(
-        java.lang.Iterable<? extends com.example.brokerterminal.proto.ValueRef> values) {
+        java.lang.Iterable<? extends com.example.brokerterminal.proto.DataFieldValue> values) {
       if (valuesBuilder_ == null) {
         ensureValuesIsMutable();
         com.google.protobuf.AbstractMessageLite.Builder.addAll(
@@ -878,10 +878,10 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
-     * Описание значения поля
+     * Описание поля с установкой значения поля
      * </pre>
      *
-     * <code>repeated .com.example.brokerterminal.proto.ValueRef values = 3;</code>
+     * <code>repeated .com.example.brokerterminal.proto.DataFieldValue values = 3;</code>
      */
     public Builder clearValues() {
       if (valuesBuilder_ == null) {
@@ -895,10 +895,10 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
-     * Описание значения поля
+     * Описание поля с установкой значения поля
      * </pre>
      *
-     * <code>repeated .com.example.brokerterminal.proto.ValueRef values = 3;</code>
+     * <code>repeated .com.example.brokerterminal.proto.DataFieldValue values = 3;</code>
      */
     public Builder removeValues(int index) {
       if (valuesBuilder_ == null) {
@@ -912,23 +912,23 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
-     * Описание значения поля
+     * Описание поля с установкой значения поля
      * </pre>
      *
-     * <code>repeated .com.example.brokerterminal.proto.ValueRef values = 3;</code>
+     * <code>repeated .com.example.brokerterminal.proto.DataFieldValue values = 3;</code>
      */
-    public com.example.brokerterminal.proto.ValueRef.Builder getValuesBuilder(
+    public com.example.brokerterminal.proto.DataFieldValue.Builder getValuesBuilder(
         int index) {
       return getValuesFieldBuilder().getBuilder(index);
     }
     /**
      * <pre>
-     * Описание значения поля
+     * Описание поля с установкой значения поля
      * </pre>
      *
-     * <code>repeated .com.example.brokerterminal.proto.ValueRef values = 3;</code>
+     * <code>repeated .com.example.brokerterminal.proto.DataFieldValue values = 3;</code>
      */
-    public com.example.brokerterminal.proto.ValueRefOrBuilder getValuesOrBuilder(
+    public com.example.brokerterminal.proto.DataFieldValueOrBuilder getValuesOrBuilder(
         int index) {
       if (valuesBuilder_ == null) {
         return values_.get(index);  } else {
@@ -937,12 +937,12 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
-     * Описание значения поля
+     * Описание поля с установкой значения поля
      * </pre>
      *
-     * <code>repeated .com.example.brokerterminal.proto.ValueRef values = 3;</code>
+     * <code>repeated .com.example.brokerterminal.proto.DataFieldValue values = 3;</code>
      */
-    public java.util.List<? extends com.example.brokerterminal.proto.ValueRefOrBuilder> 
+    public java.util.List<? extends com.example.brokerterminal.proto.DataFieldValueOrBuilder> 
          getValuesOrBuilderList() {
       if (valuesBuilder_ != null) {
         return valuesBuilder_.getMessageOrBuilderList();
@@ -952,44 +952,44 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
-     * Описание значения поля
+     * Описание поля с установкой значения поля
      * </pre>
      *
-     * <code>repeated .com.example.brokerterminal.proto.ValueRef values = 3;</code>
+     * <code>repeated .com.example.brokerterminal.proto.DataFieldValue values = 3;</code>
      */
-    public com.example.brokerterminal.proto.ValueRef.Builder addValuesBuilder() {
+    public com.example.brokerterminal.proto.DataFieldValue.Builder addValuesBuilder() {
       return getValuesFieldBuilder().addBuilder(
-          com.example.brokerterminal.proto.ValueRef.getDefaultInstance());
+          com.example.brokerterminal.proto.DataFieldValue.getDefaultInstance());
     }
     /**
      * <pre>
-     * Описание значения поля
+     * Описание поля с установкой значения поля
      * </pre>
      *
-     * <code>repeated .com.example.brokerterminal.proto.ValueRef values = 3;</code>
+     * <code>repeated .com.example.brokerterminal.proto.DataFieldValue values = 3;</code>
      */
-    public com.example.brokerterminal.proto.ValueRef.Builder addValuesBuilder(
+    public com.example.brokerterminal.proto.DataFieldValue.Builder addValuesBuilder(
         int index) {
       return getValuesFieldBuilder().addBuilder(
-          index, com.example.brokerterminal.proto.ValueRef.getDefaultInstance());
+          index, com.example.brokerterminal.proto.DataFieldValue.getDefaultInstance());
     }
     /**
      * <pre>
-     * Описание значения поля
+     * Описание поля с установкой значения поля
      * </pre>
      *
-     * <code>repeated .com.example.brokerterminal.proto.ValueRef values = 3;</code>
+     * <code>repeated .com.example.brokerterminal.proto.DataFieldValue values = 3;</code>
      */
-    public java.util.List<com.example.brokerterminal.proto.ValueRef.Builder> 
+    public java.util.List<com.example.brokerterminal.proto.DataFieldValue.Builder> 
          getValuesBuilderList() {
       return getValuesFieldBuilder().getBuilderList();
     }
     private com.google.protobuf.RepeatedFieldBuilderV3<
-        com.example.brokerterminal.proto.ValueRef, com.example.brokerterminal.proto.ValueRef.Builder, com.example.brokerterminal.proto.ValueRefOrBuilder> 
+        com.example.brokerterminal.proto.DataFieldValue, com.example.brokerterminal.proto.DataFieldValue.Builder, com.example.brokerterminal.proto.DataFieldValueOrBuilder> 
         getValuesFieldBuilder() {
       if (valuesBuilder_ == null) {
         valuesBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
-            com.example.brokerterminal.proto.ValueRef, com.example.brokerterminal.proto.ValueRef.Builder, com.example.brokerterminal.proto.ValueRefOrBuilder>(
+            com.example.brokerterminal.proto.DataFieldValue, com.example.brokerterminal.proto.DataFieldValue.Builder, com.example.brokerterminal.proto.DataFieldValueOrBuilder>(
                 values_,
                 ((bitField0_ & 0x00000004) != 0),
                 getParentForChildren(),
