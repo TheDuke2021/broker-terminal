@@ -230,7 +230,7 @@ function updateServiceSelect(serviceToCheck, type) {
             }
             break;
         case "CONNECTED":
-            if (serviceSelect.options.length == 1) {
+            if (serviceSelect.options.length === 1) {
                 if (serviceSelect.value === "none")
                     serviceSelect.innerHTML = "";
             }

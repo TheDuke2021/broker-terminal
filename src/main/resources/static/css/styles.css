@@ -12,6 +12,10 @@ body {
     flex-direction: column;
 }
 
+h1, h2, h3, h4, h5, h6, header {
+    font-family: Inter, sans-serif;
+}
+
 .font-bold {
     font-weight: 700;
 }
@@ -56,8 +60,14 @@ main {
     max-width: 768px;
     height: 100%;
     margin: auto;
-    padding: 32px;
+    padding: 48px;
     text-align: justify;
+}
+
+@media (max-width: 768px) {
+    main {
+        padding: 16px;
+    }
 }
 
 main > * {
@@ -209,11 +219,13 @@ table > tbody {
 }
 
 thead tr {
+    font-family: Poppins-Bold, sans-serif;
     color: white;
     background-color: rgb(255 75 95);
 }
 
 tbody tr {
+    font-family: Poppins, sans-serif;
     background-color: white;
 }
 

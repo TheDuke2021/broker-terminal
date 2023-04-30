@@ -12,13 +12,12 @@
     <link rel="stylesheet" th:href="@{css/styles.css}"/>
     <link rel="icon" th:href="@{images/favicon.ico}" type="image/x-icon">
     <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
           rel="stylesheet">
-
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <header>
@@ -75,15 +74,15 @@
     </div>
 </header>
 <main>
-    <span id="main-header">
+    <div id="main-header">
         <h1 class="font-bold">Терминал Брокера</h1>
         <span class="font-bold">Сервис поставки биржевой информации</span>
-    </span>
-    <h2>Описание сервиса</h2>
+    </div>
+    <h3>Описание сервиса</h3>
     <p>Сервис "Терминал Брокера" - это сервис, позволяющий оперативно отображать информацию, получаемую от сервисов
         биржевой информации, а также реализующий возможность отправки команд, исполняющихся на стороне сервисов.</p>
     <!-- Выбор сервиса БИ -->
-    <h2>Доступные сервера</h2>
+    <h3>Доступные сервера</h3>
     <select aria-label="" class="form-select" id="service-select">
         <option selected>Нет доступных серверов БИ</option>
     </select>
@@ -184,6 +183,17 @@
             </div>
         </div>
     </div>
+    <h3 style="margin-top: 32px;">Как это работает?</h3>
+    <div>
+        Ваш браузер подключается к нашему внутреннему серверу через протокол WebSocket. На данный сервер приходят
+        потоковые данные от сервисов биржевой информации в формате <a href="https://protobuf.dev/">Google Protocol
+        Buffers</a>. Вкратце, Google Protocol Buffers - это независимый от языка и платформы механизм для сериализации
+        структурированных данных. Он используется для записи и чтения структурированных данных из различных потоков
+        данных.
+        После получения данных сервер обрабатывает их и отправляет Вам, где они отображаются в виде таблицы. Так как от
+        момента формирования сообщения сервисом до получения их конечным клиентом данные могут устареть, для каждого
+        сервиса дополнительно показывается задержка отображаемой информации.
+    </div>
 </main>
 <footer>
     <div id="footer-main">
@@ -225,7 +235,7 @@
     </div>
     <div id="footer-bottom">
         <p>Совкомбанк, BEST Hack'23</p>
-        <p>All rights reserved© 2023</p>
+        <p>All rights reserved © 2023</p>
     </div>
 </footer>
 </body>
