@@ -17,7 +17,7 @@ public class ExchangeServiceTest {
         supportedCommands.add(OwnCommand.newBuilder()
                 .setAlias("buy")
                 .setCaption("Купить")
-                .setDescription("Выполняет биржевую оперцаию по покупке предмета")
+                .setDescription("Выполняет биржевую операцию по покупке предмета")
                 .addParameters(Parameter.newBuilder()
                         .setAlias("param1")
                         .setCaption("Количество")

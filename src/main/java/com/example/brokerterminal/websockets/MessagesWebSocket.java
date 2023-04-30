@@ -53,7 +53,8 @@ public class MessagesWebSocket extends TextWebSocketHandler {
     private void sendToAll(String message) throws IOException {
         for (WebSocketSession session : sessions) {
             synchronized (session) {
-                session.sendMessage(new TextMessage(message));
+                if (session.isOpen())
+                    session.sendMessage(new TextMessage(message));
             }
         }
     }
