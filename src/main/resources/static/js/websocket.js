@@ -23,18 +23,21 @@ function connectToWebSockets() {
 
     messagesSocket.onmessage = function (messageEvent) {
         const message = JSON.parse(messageEvent.data);
-        console.log(message);
         const serviceIdentifier = message.identifier;
+        //Ищем сервис, приславший данные, в массиве services
         for (let i = 0; i < services.length; i++) {
             if (services[i].identifier === serviceIdentifier) {
+                //Обновляем данные
                 services[i].data = message.data;
                 const receivedTimestamp = Date.now();
+                //Вычисляем задержку сообщения
                 services[i].latency = receivedTimestamp - message.timestamp;
 
                 break;
             }
         }
 
+        //Если выбран текущий сервис - необходимо обновить отображаемую таблицу
         if (serviceSelect.value === serviceIdentifier)
             updateStatusTab();
     };
@@ -45,13 +48,12 @@ function connectToWebSockets() {
 
     notificationsSocket.onmessage = function (messageEvent) {
         const message = JSON.parse(messageEvent.data);
-        //Если мы получили массив данных - значим, нам пришли элементы ExchangeServiceConnection на первоначальную загрузку страницы
+        //Если мы получили массив данных - значит, нам пришли элементы ExchangeServiceConnection на первоначальную загрузку страницы
         if (Array.isArray(message)) {
             services = message;
             loadServicesOnPage(message);
         } else {
             //Иначе - получено сообщение о новом соединение (или разрыве старого соединения) с сервисом биржевой информации
-            //TODO toast message о новом соединении или разрыве старого
             let service = message.connection;
             switch (message.type) {
                 case "DISCONNECTED":
@@ -68,12 +70,14 @@ function connectToWebSockets() {
                     services.push(service);
                     break;
             }
+
             updateServiceSelect(service, message.type);
 
         }
     }
 }
 
+//Первоначальный вывод данных на страницу, при получении списка подключенных сервисов
 function loadServicesOnPage(services) {
     serviceSelect.innerHTML = "";
     for (let service of services) {
@@ -83,6 +87,7 @@ function loadServicesOnPage(services) {
         serviceSelect.add(option);
     }
 
+    //Если подключенных сервисов нет - отображаем пользователю информацию об этом
     if (serviceSelect.options.length < 1) {
         let option = document.createElement("option");
         option.value = "none";
@@ -94,6 +99,7 @@ function loadServicesOnPage(services) {
     updateStatusTab();
 }
 
+//Обновление вкладки с данными (статусами)
 function updateStatusTab() {
     const identifier = serviceSelect.value;
     const service = services.find(s => s.identifier === identifier);
@@ -126,9 +132,9 @@ function updateStatusTab() {
     //Заполнение данных
     for (let dataRow of service.data.data.rows) {
         let tr = document.createElement("tr");
-        for (let valueRef of dataRow.values) {
+        for (let dataFieldValue of dataRow.values) {
             let td = document.createElement("td");
-            td.innerHTML = valueRef.value.value;
+            td.innerHTML = dataFieldValue.value.value;
             tr.appendChild(td);
         }
         body.appendChild(tr);
@@ -137,6 +143,7 @@ function updateStatusTab() {
 
 }
 
+//Обновление вкладки с командами
 function updateCommandsTab() {
     const service = services.find(s => s.identifier === serviceSelect.value);
     let commandSelect = document.querySelector("#commands-tab-pane__content__select");
@@ -147,7 +154,7 @@ function updateCommandsTab() {
     let commandParameters = document.querySelector("#commands-tab-pane__content__parameters");
     commandParameters.innerHTML = "";
 
-    if (!service || service.data == null)
+    if (!service || service.supportedCommands == null)
         return;
 
     const supportedCommands = service.supportedCommands;
@@ -196,6 +203,7 @@ function updateCommandsTab() {
     commandSelect.dispatchEvent(new Event("change"));
 }
 
+//Обновление списка с выбором текущего сервиса
 function updateServiceSelect(serviceToCheck, type) {
     const previousId = serviceSelect.value;
 
@@ -241,6 +249,7 @@ function updateServiceSelect(serviceToCheck, type) {
 }
 
 
+//Отправка команды сервису биржевой информации
 function sendCommandRequest() {
     let message = {};
     message.header = {
@@ -274,6 +283,7 @@ function sendCommandRequest() {
     messagesSocket.send(JSON.stringify(message));
 }
 
+//Отправка запроса на статус сервиса биржевой информации
 function sendStatusRequest() {
     let message = {};
     message.header = {
@@ -289,6 +299,7 @@ function sendStatusRequest() {
     console.log(message);
     messagesSocket.send(JSON.stringify(message));
 }
+
 
 window.onload = () => {
     serviceSelect = document.querySelector("#service-select");
